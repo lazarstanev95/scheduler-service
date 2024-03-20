@@ -1,0 +1,47 @@
+{
+    "appenders": {
+        "http": {
+            "type": "dateFile",
+            "filename": "logs/http.log",
+            "pattern": "-yyyy-MM-dd",
+            "maxLogSize": 10485760,
+            "category": "http"
+        },
+        "app": {
+            "type": "file",
+            "filename": "logs/app.log",
+            "maxLogSize": 10485760,
+            "numBackups": 3
+        },
+        "errorFile": {
+            "type": "file",
+            "filename": "logs/errors.log",
+            "maxLogSize": 10485760,
+            "numBackups": 3
+        },
+        "console": {
+            "type": "console"
+        }
+    },
+    "categories": {
+        "default": {
+            "appenders": [
+                "app",
+                "console"
+            ],
+            "level": "debug"
+        },
+        "http": {
+            "appenders": [
+                "http"
+            ],
+            "level": "debug"
+        },
+        "error": {
+            "appenders": [
+                "errorFile"
+            ],
+            "level": "error"
+        }
+    }
+}
