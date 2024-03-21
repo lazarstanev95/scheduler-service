@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import { createServer } from "http";
 import path from "path";
 import log4js from "log4js";
+import { MongoWrapper } from "./mongo/mongoWrapper";
 import apiRoutes from "./api";
 
 log4js.configure(path.resolve('src', 'config', 'logger', 'log4js.json'));
@@ -15,12 +16,14 @@ export class Server {
         this._app = express();
         this._httpServer = createServer(this._app);
         this._logger = log4js.getLogger('server');
+        this._mongoDB = new MongoWrapper();
     }
 
     async start() {
         this._app.use(log4js.connectLogger(log4js.getLogger('http'), {
             level: 'auto'
         }));
+        await this._mongoDB.start();
         this._app.use(cors());
         this._app.use(express.json());
         this.setRoutes();
