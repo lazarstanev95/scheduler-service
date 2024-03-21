@@ -48,10 +48,10 @@ export class MongoWrapper {
                 });
                 logger.info(`Connected to mongo db with user: ${mongo_app_username}.`);
                 mongoose.connection.on('error', err => logger.error(`${CONNECTION_EVENT_PREFIX} error: ${err}`));
-                mongoose.connection.on('disconnecting', () => logger.error(`${CONNECTION_EVENT_PREFIX} disconnecting...`));
-                mongoose.connection.on('disconnected', () => logger.error(`${CONNECTION_EVENT_PREFIX} disconnected`));
-                mongoose.connection.on('close', () => logger.error(`${CONNECTION_EVENT_PREFIX} closed`));
-                mongoose.connection.on('reconnected', () => logger.error(`${CONNECTION_EVENT_PREFIX} reconnected`));
+                mongoose.connection.on('disconnecting', () => logger.warn(`${CONNECTION_EVENT_PREFIX} disconnecting...`));
+                mongoose.connection.on('disconnected', () => logger.warn(`${CONNECTION_EVENT_PREFIX} disconnected`));
+                mongoose.connection.on('close', () => logger.info(`${CONNECTION_EVENT_PREFIX} closed`));
+                mongoose.connection.on('reconnected', () => logger.info(`${CONNECTION_EVENT_PREFIX} reconnected`));
             }
         }
     }
