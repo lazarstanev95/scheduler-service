@@ -6,6 +6,7 @@ import path from "path";
 import log4js from "log4js";
 import { MongoWrapper } from "./mongo/mongoWrapper";
 import apiRoutes from "./api";
+import { AgendaWrapper } from "./agenda";
 
 log4js.configure(path.resolve('src', 'config', 'logger', 'log4js.json'));
 
@@ -17,6 +18,7 @@ export class Server {
         this._httpServer = createServer(this._app);
         this._logger = log4js.getLogger('server');
         this._mongoDB = new MongoWrapper();
+        this._agenda = new AgendaWrapper();
     }
 
     async start() {
@@ -24,6 +26,7 @@ export class Server {
             level: 'auto'
         }));
         await this._mongoDB.start();
+        await this._agenda.start();
         this._app.use(cors());
         this._app.use(express.json());
         this.setRoutes();
