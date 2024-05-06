@@ -3,7 +3,8 @@ import Agenda from "agenda";
 import Agendash from "agendash";
 import log4js from "log4js";
 import * as alertsJob from "./jobs/alertsJob";
-import { handlerError } from "./jobs/helpers";
+import * as automaticExportJob from "./jobs/automaticExportJob";
+import { handlerError } from "./helpers";
 
 const logger = log4js.getLogger('agendaWrapper');
 
@@ -24,6 +25,10 @@ export class AgendaWrapper {
         return this.agenda;
     }
 
+    static getAgendaDash() {
+        return Agendash(this.agenda);
+    }
+
     static async connectToAgenda() {
         const {
             mongo_app_username,
@@ -41,7 +46,7 @@ export class AgendaWrapper {
         }
         const agenda = new Agenda({
             db: { address: mongoConnectionString },
-            processEvery: ' second',
+            processEvery: 'second',
             lockLimit: 0,
             defaultLockLifetime: 10000
         });
@@ -51,8 +56,8 @@ export class AgendaWrapper {
                 async.map(jobs, (job, cb) => {
                     const name = job.attrs.name;
                     logger.info(`defining job: ${job.attrs.name}`);
-                    if (name.match(/^WatchList/)) {
-                        //agenda.define(job.attrs.name, watchListJob.runJob);
+                    if (name.match(/^Automatic Export Job Recurring/) || name.match(/^Automatic Export Job Initial/)) {
+                        agenda.define(job.attrs.name, automaticExportJob.runJob);
                     } else {
                         agenda.define(job.attrs.name, alertsJob.runJob);
                     }

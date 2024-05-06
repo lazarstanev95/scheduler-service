@@ -1,0 +1,19 @@
+version: "3.8"
+services:
+    scheduler-service:
+        image: scheduler-service
+        build:
+            context: .
+        ports:
+            - "${server_port}:${server_port}"
+        container_name: scheduler-service
+        env_file:
+            - .env
+        volumes:
+            - logs:/app/logs
+            - /mnt/db-export:/backup
+        restart: unless-stopped
+        expose:
+            - ${server_port}
+volumes:
+    logs:

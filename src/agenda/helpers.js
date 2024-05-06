@@ -10,3 +10,14 @@ export function handlerError(err, ns) {
         logger.error(JSON.stringify(err, null, 4));
     }
 }
+
+export function getPriority(priority) {
+    switch (priority) {
+        case 'urgent':
+            return 'highest';
+        case 'medium':
+            return 'normal';
+        default:
+            return priority;
+    }
+}

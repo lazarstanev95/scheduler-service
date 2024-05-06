@@ -46,5 +46,6 @@ export class Server {
             res.send('Service is UP!');
         });
         this._app.use('/api', apiRoutes);
+        this._app.use('/dashboard', AgendaWrapper.getAgendaDash());
     }
 }
