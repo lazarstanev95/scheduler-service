@@ -13,6 +13,7 @@
 		"agenda": "0.9.0",
 		"agendash": "0.4.0",
 		"async": "1.4.2",
+		"consul": "1.1.0",
 		"cors": "2.8.5",
 		"dotenv": "16.4.1",
 		"express": "4.18.2",

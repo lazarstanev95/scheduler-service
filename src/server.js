@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import { createServer } from "http";
 import path from "path";
 import log4js from "log4js";
+import { ConsulWrapper } from "./consul/consulWrapper";
 import { MongoWrapper } from "./mongo/mongoWrapper";
 import apiRoutes from "./api";
 import { AgendaWrapper } from "./agenda";
@@ -17,6 +18,7 @@ export class Server {
         this._app = express();
         this._httpServer = createServer(this._app);
         this._logger = log4js.getLogger('server');
+        this._consul = new ConsulWrapper();
         this._mongoDB = new MongoWrapper();
         this._agenda = new AgendaWrapper();
     }
@@ -25,6 +27,7 @@ export class Server {
         this._app.use(log4js.connectLogger(log4js.getLogger('http'), {
             level: 'auto'
         }));
+        await this._consul.start();
         await this._mongoDB.start();
         await this._agenda.start();
         this._app.use(cors());
