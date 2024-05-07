@@ -7,5 +7,7 @@ export const consulKeys = [
     'mongo-app-username',
     'mongo-app-password',
     'mongo-admin-username',
-    'mongo-admin-password'
+    'mongo-admin-password',
+    'dashboard-username',
+    'dashboard-password'
 ];

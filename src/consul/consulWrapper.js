@@ -10,7 +10,9 @@ const devModeExceptionKeys = [
     "mongo-app-username",
     "mongo-app-password",
     "mongo-admin-username",
-    "mongo-admin-password"
+    "mongo-admin-password",
+    "dashboard-username",
+    "dashboard-password"
 ];
 
 const getConsulKeys = () => {
@@ -97,6 +99,9 @@ export class ConsulWrapper {
         }, []);
         return watchers;
     }
+
+    getKey = (path) => this._consul.kv.get({ key: path });
+    setKey = (path, value) => this._consul.kv.set({ key: path, value });
 }
 
 export const consulKeyToEnvVar = (value) => {

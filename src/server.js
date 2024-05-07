@@ -1,4 +1,5 @@
 import express from "express";
+import basicAuth from "express-basic-auth";
 import cors from "cors";
 import dotenv from "dotenv";
 import { createServer } from "http";
@@ -45,10 +46,17 @@ export class Server {
     }
 
     setRoutes() {
+        const {
+            dashboard_username,
+            dashboard_password
+        } = process.env;
         this._app.get('/', (req, res) => {
             res.send('Service is UP!');
         });
         this._app.use('/api', apiRoutes);
-        this._app.use('/dashboard', AgendaWrapper.getAgendaDash());
+        this._app.use('/dashboard', basicAuth({
+            users: { [dashboard_username]: dashboard_password },
+            challenge: true
+        }), AgendaWrapper.getAgendaDash());
     }
 }
