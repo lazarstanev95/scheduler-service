@@ -63,7 +63,7 @@ export function deleteJob(data, done) {
 }
 
 export async function runJob(job, done) {
-    const { 
+    const {
         mongo_admin_username,
         mongo_admin_password
     } = process.env;
@@ -81,8 +81,16 @@ export async function runJob(job, done) {
         authenticationDbName: 'admin'
     }
 
-    purgeOldFiles(isDevMode);
-    await backupDB({ config });
+    try {
+        purgeOldFiles(isDevMode);
+        await backupDB({ config });
+        if (!isFirstRun) {
+            done(null, job.attrs.data);
+        }
+    } catch (error) {
+        logger.error(`failed with error ${JSON.stringify(error)}`);
+        return done(error);
+    }
 
     if (isFirstRun) {
         agenda.cancel({ name: JOB_NAME_INITIAL }, () => {
@@ -110,8 +118,8 @@ export async function runJob(job, done) {
     }
 }
 
-function backupDB ({ config }) {
-    const { 
+function backupDB({ config }) {
+    const {
         dbName,
         host,
         port,
